@@ -2,7 +2,7 @@ import React from 'react'
 
 import { getTranslate } from './getTranslate'
 
-export type Data = Record<string, string | number>
+export type Data = Record<string, string | number | null | undefined>
 
 export interface TranslateProps {
   id: string
