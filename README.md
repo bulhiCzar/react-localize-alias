@@ -1,4 +1,7 @@
 Library for localization of React applications with support for templates and HTML
+---
+Package size:  9.6 kB
+---
 
 <p align="center">
   <a href="https://www.npmjs.com/package/react-localize-alias">
