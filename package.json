@@ -1,6 +1,6 @@
 {
   "name": "react-localize-alias",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "repository": {
@@ -14,7 +14,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "commit": "git add . && git commit -a",
+    "commit": "git add . && git commit && git push",
     "pubp": "yarn build && npm publish --access public && yarn commit"
   },
   "private": false,
