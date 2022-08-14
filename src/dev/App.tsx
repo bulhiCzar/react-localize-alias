@@ -1,7 +1,12 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useEffect } from 'react'
 
-import { initLocalization, Translate, withLocalization } from '../index'
+import {
+  initLocalization,
+  Translate,
+  setActiveLanguage,
+  getTranslate,
+} from '../index'
 
 const translations = {
   en: {
@@ -16,7 +21,7 @@ const translations = {
   },
 }
 
-export const App = withLocalization(({ setActiveLanguage }) => {
+export const App = () => {
   useEffect(() => {
     initLocalization({
       languages: [
@@ -52,8 +57,10 @@ export const App = withLocalization(({ setActiveLanguage }) => {
         data={{ number: 123 }}
       />
 
+      {getTranslate('bam_bom')}
+
       <Translate id="hello_gay" />
 
     </div>
   )
-})
+}

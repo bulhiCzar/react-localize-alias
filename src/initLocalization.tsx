@@ -32,11 +32,13 @@ export const languagesMap: Map<Code, Language> = new Map()
 export interface Config {
   activeLanguage: string
   onMissingTranslation?: onMissingTranslationFunction
+  setActiveLanguage: (code: string) => void
 }
 
 export const config: Config = {
   activeLanguage: '',
   onMissingTranslation: () => null,
+  setActiveLanguage: () => null,
 }
 
 export const initLocalization = (props: InitLocalization): void => {
