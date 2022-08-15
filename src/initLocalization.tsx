@@ -59,4 +59,6 @@ export const initLocalization = (props: InitLocalization): void => {
   config.activeLanguage = options.defaultLanguage || languages[0].code
 
   config.onMissingTranslation = options.onMissingTranslation || (() => null)
+
+  config.setActiveLanguage(config.activeLanguage)
 }
