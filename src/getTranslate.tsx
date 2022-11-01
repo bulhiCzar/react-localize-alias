@@ -18,6 +18,7 @@ export const getTranslate = (
 
   const { config } = useLocalization()
 
+  id = config.onAlias(id)
   const translated = (translationsMap.get(config.activeLanguage) || {})[id]
 
   const replaceWithData = (text: string, data: Data = {}): string => {
@@ -27,10 +28,7 @@ export const getTranslate = (
     })
   }
 
-  if (
-    !translated &&
-    typeof config.onMissingTranslation === 'function'
-  ) {
+  if (!translated) {
     config.onMissingTranslation({
       translationId: id,
       languageCode: config.activeLanguage,

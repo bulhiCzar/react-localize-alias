@@ -11,10 +11,12 @@ export interface onMissingTranslationProps {
 }
 
 export type onMissingTranslationFunction = (data: onMissingTranslationProps) => void
+export type onAliasFunction = (alias: string) => string
 
 export interface Options {
   defaultLanguage: string
-  onMissingTranslation: onMissingTranslationFunction
+  onMissingTranslation?: onMissingTranslationFunction
+  onAlias?: onAliasFunction
 }
 
 export type Translation = Record<string, string>
@@ -31,7 +33,8 @@ export const languagesMap: Map<Code, Language> = new Map()
 
 export interface Config {
   activeLanguage: string
-  onMissingTranslation?: onMissingTranslationFunction
+  onMissingTranslation: onMissingTranslationFunction
+  onAlias: onAliasFunction
   setActiveLanguage: (code: string) => void
 }
 
@@ -39,6 +42,7 @@ export const config: Config = {
   activeLanguage: '',
   onMissingTranslation: () => null,
   setActiveLanguage: () => null,
+  onAlias: (a) => a,
 }
 
 export const initLocalization = (props: InitLocalization): void => {
@@ -59,6 +63,7 @@ export const initLocalization = (props: InitLocalization): void => {
   config.activeLanguage = options.defaultLanguage || languages[0].code
 
   config.onMissingTranslation = options.onMissingTranslation || (() => null)
+  config.onAlias = options.onAlias || ((a) => a)
 
   config.setActiveLanguage(config.activeLanguage)
 }

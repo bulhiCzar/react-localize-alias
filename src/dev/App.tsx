@@ -33,6 +33,7 @@ export const App = () => {
         defaultLanguage: 'ru',
         // eslint-disable-next-line no-console
         onMissingTranslation: data => console.log(data),
+        onAlias: (alias) => alias,
       },
     })
   }, [])
