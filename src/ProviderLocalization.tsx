@@ -11,7 +11,11 @@ export interface ContextLocalizationProps {
 
 export const ContextLocalization = React.createContext<ContextLocalizationProps>({} as any)
 
-export const ProviderLocalization: React.FC = ({ children }) => {
+export interface ProviderLocalizationProps {
+  children: React.ReactNode
+}
+
+export const ProviderLocalization: React.FC<ProviderLocalizationProps> = ({ children }) => {
   const [state, dispatch] = useStore(config)
 
   const setActiveLanguage = (code: string) => {
