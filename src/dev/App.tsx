@@ -1,8 +1,8 @@
-/* eslint-disable no-template-curly-in-string */
-import React, { useEffect } from 'react'
+/* eslint-disable no-template-curly-in-string,@typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from 'react'
 
 import {
-  initLocalization,
+  initLocalize,
   Translate,
   setActiveLanguage,
   getTranslate,
@@ -12,31 +12,39 @@ const translations = {
   en: {
     hello: 'hi',
     'auth.title': 'welcome to site',
-    auth_button: 'next ${numebr} <hr/>',
+    'auth.button': 'next ${numebr} <hr/>',
   },
   ru: {
+    bam_bom: '',
     hello: 'привет',
     'auth.title': 'спс за регу',
-    auth_button: 'далее ${number} <div>asdasd</div>',
+    'auth.button': 'далее ${number} <div>asdasd</div>',
+    'bam.bom': 'bam and bom',
   },
 }
 
 export const App = () => {
+  const [code, setCode] = useState('ru')
+
   useEffect(() => {
-    initLocalization({
+    initLocalize({
       languages: [
         { code: 'en', name: 'English' },
         { code: 'ru', name: 'Руский' },
       ],
       translations,
       options: {
-        defaultLanguage: 'ru',
+        defaultLanguage: code,
         // eslint-disable-next-line no-console
-        onMissingTranslation: data => console.log(data),
+        onMissing: data => console.log(data),
         onAlias: (alias) => alias,
       },
     })
   }, [])
+
+  useEffect(() => {
+    setActiveLanguage(code)
+  }, [code])
 
   return (
     <div>
@@ -44,21 +52,23 @@ export const App = () => {
 
       <hr />
 
-      <button type="button" onClick={() => setActiveLanguage('en')}>
+      <button type="button" onClick={() => setCode('en')}>
         set EN
       </button>
-      <button type="button" onClick={() => setActiveLanguage('ru')}>
+      <button type="button" onClick={() => setCode('ru')}>
         set RU
       </button>
 
       <hr />
 
       <Translate
-        id="auth_button"
+        id="auth.button"
         data={{ number: 123 }}
       />
+      <hr />
 
-      {getTranslate('bam_bom')}
+      {getTranslate('bam.bom')}
+      <hr />
 
       <Translate id="hello_gay" />
 

@@ -1,49 +1,35 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import React from 'react'
-import {
-  translationsMap,
-} from './initLocalization'
-import {
-  useLocalization,
-} from './ProviderLocalization'
-import { TranslateProps, Data } from './Translate'
+import type { Data } from './types'
+import { $config, $translations } from './store'
+import { replaceWithData } from './utils'
 
-export type getTranslateData = Omit<TranslateProps, 'id'>
+export interface GetTranslateOptions {
+  data?: Data
+}
 
 export const getTranslate = (
   id: string,
-  props?: getTranslateData,
-): React.DOMElement<React.DOMAttributes<Element>, Element> | string => {
-  const { data } = props || {}
+  options: GetTranslateOptions = {},
+): string => {
+  const { data } = options
 
-  const { config } = useLocalization()
+  const config = $config.getState()
+  const translations = $translations.getState()
 
-  id = config.onAlias(id)
-  const translated = (translationsMap.get(config.activeLanguage) || {})[id]
+  if (config?.onAlias) {
+    id = config?.onAlias(id, config?.activeLanguage)
+  }
+  const translated = config?.activeLanguage && translations[config.activeLanguage][id]
 
-  const replaceWithData = (text: string, data: Data = {}): string => {
-    return text.replace(/\$\{(\w+)\}/g, (str: string, key: string) => {
-      const value = data[key] || ''
-      return value.toString()
+  if (!translated && config?.onMissing) {
+    config?.onMissing({
+      id,
+      code: config?.activeLanguage,
     })
   }
 
-  if (!translated) {
-    config.onMissingTranslation({
-      translationId: id,
-      languageCode: config.activeLanguage,
-    })
-  }
-
-  const isHTML = /<\/?[a-z][\s\S]*>/i.test(translated)
-
-  const result = !translated
+  return !translated
     ? id
     : data
       ? replaceWithData(translated, data)
       : translated
-
-  return isHTML
-    ? React.createElement('span', { dangerouslySetInnerHTML: { __html: result } })
-    : result
 }
