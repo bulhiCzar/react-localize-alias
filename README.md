@@ -1,7 +1,4 @@
 Library for localization of React applications with support for templates and HTML
----
-Package size:  9.6 kB
----
 
 <p align="center">
   <a href="https://www.npmjs.com/package/react-localize-alias">
@@ -20,11 +17,10 @@ npm i react-localize-alias
 ### Simple
 ```
 import {
-initLocalization,
-Translate,
-withLocalization,
-getTranslate,
-ProviderLocalization,
+  initLocalize,
+  Translate,
+  setActiveLanguage,
+  getTranslate,
 } from 'react-localize-alias'
 
 const translations = {
@@ -43,23 +39,33 @@ const translations = {
 export const App = () => {
 
   useEffect(() => {
-    initLocalization({
-      languages: [
-        { code: 'en', name: 'English' },
-        { code: 'ru', name: 'Русский' },
-      ],
-      translations,
-      options: {
-        defaultLanguage: 'ru',
-        onMissingTranslation: data => console.log(data),
-      },
-    })
+   initLocalize({
+         languages: [
+           { code: 'en', name: 'English' },
+           { code: 'ru', name: 'Russian' },
+         ],
+         translations,
+         options: {
+           defaultLanguage: 'en',
+           // if the alias for the current language is not found. this function will be called
+           onMissing: data => console.log(data),
+           // this function will be called whenever the alias is rendered. here you can change the aliases that were set in the components
+           onAlias: (alias) => alias,
+         },
+       })
   }, [])
 
   console.log(getTranslate('hello'))
 
   return (
-    <ProviderLocalization>
+    <>
+      <button type="button" onClick={() => setActiveLanguage('en')}>
+        set EN
+      </button>
+      <button type="button" onClick={() => setActiveLanguage('ru')}>
+        set RU
+      </button>
+
       <Translate id="hello" />
 
       <Translate
@@ -69,25 +75,16 @@ export const App = () => {
 
       <Translate id="not_found_alias" /> 
 
-    </ProviderLocalization>
+    </>
   )
 }
 ```
 
 ## Documentation
 
-#### Set Provider 
-```
-import { ProviderLocalization } from 'react-localize-alias'
-
-<ProviderLocalization>
-    <AppInit />
-</ProviderLocalization>
-```
-
 #### Init Localize 
 ```
-import { initLocalization } from 'react-localize-alias'
+import { initLocalize } from 'react-localize-alias'
 
 const translations = {
     en: {
@@ -102,7 +99,7 @@ const translations = {
     }
 }
 
-initLocalization({
+initLocalize({
     languages: [
         { code: 'en', name: 'English' },
         { code: 'ru', name: 'Руский' },
@@ -110,7 +107,7 @@ initLocalization({
     translations,
     options: {
       defaultLanguage: 'en',
-      onMissingTranslation: data => console.log(data),
+      onMissing: data => console.log(data),
     },
 })
 ```
@@ -129,15 +126,13 @@ getTranslate('auth_button', { data: { number: 5 } } })
 
 #### Change language 
 ```
-import { withLocalization } from 'react-localize-alias'
+import { setActiveLanguage } from 'react-localize-alias'
 
-const App = withLocalization((props) => {
-    const { setActiveLanguage } = props
-
+const App = () => {
     const handlerLanguage = () => {
         setActiveLanguage('en')
     }
 
     return <div onClick={handlerLanguage}>set en</div>  
-})
+}
 ```
