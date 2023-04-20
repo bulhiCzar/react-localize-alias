@@ -4,18 +4,19 @@ import { replaceWithData } from './utils'
 
 export interface GetTranslateOptions {
   data?: Data
+  missOnAlias?: boolean
 }
 
 export const getTranslate = (
   id: string,
   options: GetTranslateOptions = {},
 ): string => {
-  const { data } = options
+  const { data, missOnAlias } = options
 
   const config = $config.getState()
   const translations = $translations.getState()
 
-  if (config?.onAlias) {
+  if (config?.onAlias && !missOnAlias) {
     id = config?.onAlias(id, config?.activeLanguage)
   }
   const translated = config?.activeLanguage && translations[config.activeLanguage][id]

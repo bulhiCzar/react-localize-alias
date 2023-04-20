@@ -8,16 +8,18 @@ import type { Data } from './types'
 export interface TranslateProps {
   id: string
   data?: Data
+  missOnAlias?: boolean
 }
 
 export const Translate: React.FC<TranslateProps> = ({
   id,
   data,
+  missOnAlias,
 }) => {
   const config = useStore($config)
   const translations = useStore($translations)
 
-  if (config?.onAlias) {
+  if (config?.onAlias && !missOnAlias) {
     id = config?.onAlias(id, config?.activeLanguage)
   }
   const translated = config?.activeLanguage && translations[config.activeLanguage][id]
